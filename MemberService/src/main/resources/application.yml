@@ -1,10 +1,6 @@
 server:
   port: 0
 
-spring:
-  application:
-    name: member-service
-
 eureka:
   instance:
     instance-id:
@@ -14,3 +10,29 @@ eureka:
     fetch-registry: true
     service-url:
       defaultZone: http://127.0.0.1:8761/eureka
+
+greeting:
+  message: Welcome to the Simple E-commerce
+
+spring:
+  application:
+    name: member-service
+
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+    url: jdbc:h2:tcp://localhost/~/test
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        format_sql: true
+        show_sql: true
+      logging.level:
+        org.hibernate.SQL: debug
