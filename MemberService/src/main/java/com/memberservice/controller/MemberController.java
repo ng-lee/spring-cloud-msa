@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -54,18 +55,20 @@ public class MemberController {
         List<ResponseMember> result = memberService.getMemberByAll().stream().map(member -> ResponseMember.builder()
                 .email(member.getEmail())
                 .name(member.getName())
-                .memberId(member.getMemberId()).build()).toList();
+                .memberId(member.getMemberId())
+                .orders(new ArrayList<>()).build()).toList();
 
         return ResponseEntity.ok(result);
     }
 
     @GetMapping("/users/{user-id}")
-    public ResponseEntity<ResponseMember> getUser(@PathVariable("userId") String memberId) {
+    public ResponseEntity<ResponseMember> getUser(@PathVariable("user-id") String memberId) {
         MemberDto memberDto = memberService.getMemberByMemberId(memberId);
         ResponseMember responseMember = ResponseMember.builder()
                 .email(memberDto.getEmail())
                 .name(memberDto.getName())
-                .memberId(memberDto.getMemberId()).build();
+                .memberId(memberDto.getMemberId())
+                .orders(new ArrayList<>()).build();
 
         return ResponseEntity.ok(responseMember);
     }
