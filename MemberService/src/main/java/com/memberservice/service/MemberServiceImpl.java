@@ -21,10 +21,14 @@ public class MemberServiceImpl implements MemberService {
         Member member = Member.builder()
                 .email(memberDto.getEmail())
                 .name(memberDto.getName())
+                .memberId(memberDto.getMemberId())
                 .encryptedPwd("encrypted_password").build();
 
         memberRepository.save(member);
 
-        return null;
+        return MemberDto.builder()
+                .email(member.getEmail())
+                .name(member.getName())
+                .memberId(member.getMemberId()).build();
     }
 }

@@ -4,8 +4,10 @@ import com.memberservice.dto.MemberDto;
 import com.memberservice.service.MemberService;
 import com.memberservice.vo.Greeting;
 import com.memberservice.vo.RequestMember;
+import com.memberservice.vo.ResponseMember;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -13,9 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class MemberController {
 
-    @Autowired
-    private Greeting greeting;
-
+    private final Greeting greeting;
     private final MemberService memberService;
 
     @GetMapping("/health-check")
@@ -29,7 +29,7 @@ public class MemberController {
     }
 
     @PostMapping("/users")
-    public String createUser(@RequestBody RequestMember requestMember) {
+    public ResponseEntity<ResponseMember> createUser(@RequestBody RequestMember requestMember) {
 
         MemberDto memberDto = MemberDto.builder()
                 .email(requestMember.getEmail())
@@ -38,6 +38,12 @@ public class MemberController {
 
         memberService.createMember(memberDto);
 
-        return "Create member method is called";
+        ResponseMember responseMember = ResponseMember.builder()
+                .email(memberDto.getEmail())
+                .name(memberDto.getName())
+                .memberId(memberDto.getMemberId())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseMember);
     }
 }
