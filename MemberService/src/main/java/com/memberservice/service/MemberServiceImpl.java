@@ -4,6 +4,7 @@ import com.memberservice.dto.MemberDto;
 import com.memberservice.entity.Member;
 import com.memberservice.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -13,6 +14,7 @@ import java.util.UUID;
 public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
+    private final BCryptPasswordEncoder passwordEncoder;
 
     @Override
     public MemberDto createMember(MemberDto memberDto) {
@@ -22,7 +24,7 @@ public class MemberServiceImpl implements MemberService {
                 .email(memberDto.getEmail())
                 .name(memberDto.getName())
                 .memberId(memberDto.getMemberId())
-                .encryptedPwd("encrypted_password").build();
+                .encryptedPwd(passwordEncoder.encode(memberDto.getPwd())).build();
 
         memberRepository.save(member);
 
