@@ -13,7 +13,7 @@ eureka:
 
 spring:
   application:
-    name: catalog-service
+    name: order-service
 
   h2:
     console:
@@ -34,7 +34,3 @@ spring:
         show_sql: true
       logging.level:
         org.hibernate.SQL: debug
-    defer-datasource-initialization: true
-  sql:
-    init:
-      mode: always
