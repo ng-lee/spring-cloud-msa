@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/member-service")
 @RequiredArgsConstructor
@@ -45,5 +47,26 @@ public class MemberController {
                 .build();
 
         return ResponseEntity.status(HttpStatus.CREATED).body(responseMember);
+    }
+
+    @GetMapping("/users")
+    public ResponseEntity<List<ResponseMember>> getUsers() {
+        List<ResponseMember> result = memberService.getMemberByAll().stream().map(member -> ResponseMember.builder()
+                .email(member.getEmail())
+                .name(member.getName())
+                .memberId(member.getMemberId()).build()).toList();
+
+        return ResponseEntity.ok(result);
+    }
+
+    @GetMapping("/users/{user-id}")
+    public ResponseEntity<ResponseMember> getUser(@PathVariable("userId") String memberId) {
+        MemberDto memberDto = memberService.getMemberByMemberId(memberId);
+        ResponseMember responseMember = ResponseMember.builder()
+                .email(memberDto.getEmail())
+                .name(memberDto.getName())
+                .memberId(memberDto.getMemberId()).build();
+
+        return ResponseEntity.ok(responseMember);
     }
 }
