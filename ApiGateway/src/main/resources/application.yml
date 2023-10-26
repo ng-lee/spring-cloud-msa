@@ -23,7 +23,17 @@ spring:
         - id: member-service
           uri: lb://MEMBER-SERVICE
           predicates:
+            - Path=/member-service/members
+            - Method=POST
+        - id: member-service
+          uri: lb://MEMBER-SERVICE
+          predicates:
             - Path=/member-service/**
+            - Method=GET
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/member-service/(?<segment>.*),/$\{segment}
+            - AuthorizationHeaderFilter
         - id: catalog-service
           uri: lb://CATALOG-SERVICE
           predicates:
@@ -53,3 +63,6 @@ spring:
                 postLogger: true
 #            - AddRequestHeader=second-request, second-request-header2
 #            - AddResponseHeader=second-response, second-response-header2
+
+jwt:
+  secret: "secret"
