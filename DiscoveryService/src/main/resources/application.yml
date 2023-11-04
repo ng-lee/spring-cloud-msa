@@ -4,7 +4,7 @@ server:
 spring:
   application:
     name: dicoveryservice
-
+  
 eureka:
   client:
     register-with-eureka: false
